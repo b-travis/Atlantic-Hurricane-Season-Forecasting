@@ -59,6 +59,7 @@ Some years were predicted better than others. In 2020, for example, model missed
 #### Outline of project
 
 - [season_forecasting.ipynb](https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/season_forecasting.ipynb)
+- https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/MLAI_Capstone_Hurricane_Forecasting.pdf 
 
 
 ##### Contact and Further Information
