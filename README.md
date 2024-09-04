@@ -18,7 +18,6 @@ Sources:
 - https://www.noaa.gov/news-release/noaa-predicts-above-normal-2024-atlantic-hurricane-season
 - https://tropical.colostate.edu/forecasting.html
 
-
 #### Data Sources
 Hurricane/named storm information: hurdat2 dataset
 Oceanic Nino Index from NOAA
@@ -34,6 +33,8 @@ NDBC Data was collected from two buoys: MidGulf (Station 42001) and South Hatter
 Features I expect to be most important in the training of the model: May Mid-Gulf ocean temperature, which is meant to be a proxy for basin-wide sea surface temperature, and should be positively correlated with storm activity. It does seem to be somewhat loosely correlated.
 The second feature: May Oceanic Nino Index (ONI), which should be negatively correlated with storm activity.
 
+![alt text](https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/figures/EDA_NumStorms_and_ONI.png)
+
 #### Methodology
 Feature Engineering: As part of Grid Search, implemented Polynomial Features with degree ranging from 1 to 6 on the aforementioned features
 Train-Test Split: Years 1976 to 2010 included in training; 2011 to 2022 set aside for testing
@@ -41,25 +42,35 @@ Scaling: Feature scaling via StandardScaler(). Only numeric features are used.
 Tested 4 different models using sklearn implementations, with a Grid Search to find optimal hyperparameters:
 - DummyRegressor(): strategy = ‘mean’; this creates a baseline to compare against
 - LinearRegression(): only hyperparameter is polynomial degree for PolynomialFeatures()
+- LinearRegression() with select features; features limited to the two ONI and Water Temperature features expected to be most important
 - Ridge(): sklearn’s implementation of linear regression with L2 regularization. Hyperparameter: alpha (controls amount of regularization)
 - Lasso(): sklearn’s implementation of linear regression with L1 regularization. Hyperparameter: C (controls amount of regularization)
 
 #### Results
-In the models I developed, the Test R2 scores were very poor, with values below 0, indicating really poor model performance. 
+In the models I developed, the Test R2 scores were very poor, with values mostly below 0, indicating really poor model performance. (Believe it or not, the results shown are an improvement on several iterations of modeling... but there is a ton of room for improvement.)
 Among the tested models, Ridge regularization yielded the best performance in terms of mean squared error and R2. Despite the low Test R2 scores, all the models outperformed the DummyRegressor() baseline model – perhaps there is at least some predictive value in these models.
+
+The models predicting Total Accumulated Cyclone Energy also performed better for the most part than those predicting Number of Storms. It could be that while the number of storms to develop depends on many factors not captured by the beginning of season data, the conditions that create big storms (and therefore greater ACE) are slightly more correlated with the features including in the modeling here.
+
+![Modeling performance metrics](https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/figures/results_MSE_R2.png)
 
 Some years were predicted better than others. In 2020, for example, model missed an historically active hurricane season. Looks like data was missing for Mid-Gulf buoy for most of 2020, and in our data preparation we  forward-filled missing data. The last known temperature from January 2020 was 24 degrees C, much cooler than the May average of closer to 27 degrees. This is a likely factor in the model “missing” the very active 2020 season. Perhaps different data preparation could be used to populate the May 2020 Mid-Gulf buoy data with something closer to the May means rather than the January 2020 data.
 
+Keep in mind in the following plots that post-2010 data was reserved for testing (i.e. not used in the training of the model):
+
+![Actual vs Predicted: Number of Storms](https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/figures/actual_v_predicted_numstorms.png)
+![Actual vs Predicted: Total ACE](https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/figures/actual_v_predicted_ACE.png)
+
 #### Next steps
 - Add additional features (data): additional buoy data from NDBC, air temperature data, ...
-- Interpolate for missing buoy data so that we can fit on more samples
-- Fit model on different target variables (Accumulated Cyclone Energy, etc.)
-- Monthly forecasting rather than full-season forecasts, so that we have 12x the data (12 samples per year rather than just 1)
+- Better interpolation of missing data
+- Fit model on different target variables
+- Monthly or two-month forecasting outlooks rather than full-season forecasts (would expect better predictive power on shorter time frames)
 
 #### Outline of project
 
 - [season_forecasting.ipynb](https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/season_forecasting.ipynb)
-- https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/MLAI_Capstone_Hurricane_Forecasting.pdf 
+- https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/MLAI_Capstone_Hurricane_Forecasting_updated.pdf 
 
 
 ##### Contact and Further Information
