@@ -62,7 +62,7 @@ Keep in mind in the following plots that post-2010 data was reserved for testing
 ![Actual vs Predicted: Total ACE](https://github.com/b-travis/Atlantic-Hurricane-Season-Forecasting/blob/main/figures/actual_v_predicted_ACE.png)
 
 #### Next steps
-- Add additional features (data): additional buoy data from NDBC, air temperature data, ...
+- Add additional features (data): additional buoy data from NDBC, air temperature data, North Atlantic Oscillation, Madden-Julien Oscillation, Saharan Dust, ...
 - Better interpolation of missing data
 - Fit model on different target variables
 - Monthly or two-month forecasting outlooks rather than full-season forecasts (would expect better predictive power on shorter time frames)
